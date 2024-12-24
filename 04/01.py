@@ -1,5 +1,5 @@
 if __name__ == "__main__":
-    with open("test.txt", "r") as f:
+    with open("input.txt", "r") as f:
         lines = [line.strip() for line in f.readlines()]
         def fetchWords(i, j, length):
             n, ne, e, se, s, sw, w, nw = ["" for k in range(8)]
