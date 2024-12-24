@@ -1,46 +1,27 @@
-from pprint import pprint
-
-def parse_dos(line: str) -> list[str]:
-    chunks = line.split('do()')
-    dos = []
-    for chunk in chunks:
-        result = chunk.split("don't()")
-        dos.append(result[0])
-    pprint(line.split("don't"))
-    print('\n')
-    pprint(dos)
-    print('\n')
-    print('\n')
-    print('\n')
-
-    return dos
-
-def parse(line):
-    chunks = line.split('mul(')
-    pairs = []
-    for chunk in chunks:
-        nums = chunk.split(')')[0].split(',')
-        if len(nums) != 2:
-            continue
-        num1 = None
-        num2 = None
-        try:
-            num1 = int(nums[0])
-            num2 = int(nums[1])
-        except(ValueError):
-            # print(nums, num1, num2)
-            continue
-        pairs.append((num1, num2))
-    return pairs
-
 if __name__ == "__main__":
     with open("input.txt", "r") as f:
-        lines = f.readlines()
-        numbers = []
-        for line in lines:
-            dos = parse_dos(line)
-            numbers = numbers + parse(str.join("", dos))
-        sum = 0
-        for pair in numbers:
-            sum += pair[0] * pair[1]
-        print(sum)
+        lines = [line.strip() for line in f.readlines()]
+        def checkWord(i, j, length):
+            ne = ''
+            se = ''
+            for l in range(-1, length - 1):
+                def safe_get_char(i, j, default=''):
+                    if 0 <= i < len(lines) and 0 <= j < len(lines[i]):
+                        return lines[i][j]
+                    return default
+                
+                ne += safe_get_char(i + l, j + l)
+                se += safe_get_char(i - l, j + l)
+            
+            # words = [ne, se]
+            print(i, j, ne, se)
+            acceptable = ['MAS', 'SAM']
+            return ne in acceptable and se in acceptable
+
+        xmasCount = 0
+        for i, hLine in enumerate(lines):
+            for j, c in enumerate(hLine):
+                if checkWord(i, j, 3):
+                    xmasCount += 1
+        
+        print(xmasCount)
